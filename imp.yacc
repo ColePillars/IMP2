@@ -35,7 +35,7 @@ using namespace std;
 
 // function prototypes, we need the yylex return prototype so C++ won't complain
 int yylex();
-void yyerror(char * s);
+void yyerror(const char * s);
 
 %}
 
@@ -43,6 +43,7 @@ void yyerror(char * s);
 
 %union {
   float num;
+  float input;
   char *id;
   exp_node *exp_node_ptr;
   statement *st;
@@ -52,6 +53,7 @@ void yyerror(char * s);
 
 %token <num> NUMBER
 %token <id> ID
+%token <input> INPUT
 %token SEMICOLON  EQUALS PRINT  PLUS MINUS TIMES DIVIDE  LPAREN RPAREN LBRACE RBRACE
 %type <exp_node_ptr> exp
 %type <exp_node_ptr> mulexp
@@ -119,6 +121,8 @@ primexp:	MINUS primexp %prec UMINUS { $$ = new unary_minus_node($2); }
       |	NUMBER { $$ = new number_node($1); }
 
       | ID { $$ = new id_node($1); }
+
+      | INPUT { $$ = new input_node($1); }
 ;
  
 %%
@@ -139,7 +143,7 @@ int main(int argc, char **argv)
   root->evaluate();
 }
 
-void yyerror(char * s)
+void yyerror(const char * s)
 {
   fprintf(stderr, "line %d: %s\n", line_num, s);
 }

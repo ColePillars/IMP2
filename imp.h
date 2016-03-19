@@ -36,6 +36,16 @@ class number_node : public exp_node {
   float evaluate();
 };
 
+class input_node : public exp_node {
+    private:
+        float num;
+
+    public:
+        input_node(float value);
+        void print();
+        float evaluate();
+    };
+
 class unary_minus_node : public exp_node {
  protected:
   exp_node *exp;

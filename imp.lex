@@ -40,6 +40,7 @@ LETTER [a-zA-Z]
 %}
 
 print   { return PRINT; }
+"input"   { return INPUT; }
 {DIGIT}+ {
 	yylval.num = atof(yytext); return NUMBER;
 	}

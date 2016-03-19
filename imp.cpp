@@ -23,8 +23,24 @@ void number_node:: print() {
   cout << num;
 }
 
-  float number_node::evaluate() { 
+  float number_node::evaluate() {
+    //cin >> num;
     return num; }
+
+
+input_node::input_node(float value) {
+    num = value;
+}
+
+void input_node:: print() {
+    cout << "input";
+}
+
+float input_node:: evaluate() {
+    cout << "input: ";
+    cin >> num;
+    return num;
+}
 
   id_node::id_node(string value) : id(value) {}
 
