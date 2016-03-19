@@ -24,7 +24,6 @@ void number_node:: print() {
 }
 
   float number_node::evaluate() {
-    //cin >> num;
     return num; }
 
 
