@@ -38,6 +38,7 @@ void input_node:: print() {
 float input_node:: evaluate() {
     cout << "input: ";
     cin >> num;
+    cout << endl;
     return num;
 }
 
