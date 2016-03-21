@@ -1,13 +1,16 @@
 a $= true;
 b $= false;
 c $= b;
+
 d $= (a || b);
 e $= (a && b);
+
 f $= (a == b);
 g $= (a == true);
 
-x = input;
-y = input;
+h $= !true;
+i $= !a;
+j $= !i;
 
 print a;
 print b;
@@ -16,8 +19,6 @@ print d;
 print e;
 print f;
 print g;
-
-print x/y;
-print x*y;
-print x-y;
-print x+y;
+print h;
+print i;
+print j;

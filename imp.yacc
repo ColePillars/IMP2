@@ -83,7 +83,7 @@ stmtlist :
 
     | stmtlist SEMICOLON error { $$ = $1; yyclearin; }
 
-    |  stmt { $$ = $1;   }
+    | stmt { $$ = $1;   }
 ;
 
 stmt:
@@ -98,7 +98,7 @@ stmt:
     | { $$ = new skip_stmt(); }
 
     | LBRACE stmtlist RBRACE { $$=$2; }
- ;
+;
 
 
 exp:
@@ -149,9 +149,9 @@ bmulexp:
 
 
 btermexp:
-	//NOT btermexp { $$ = new not_node($2); } |
+	NOT btermexp { $$ = new not_node($2); }
 
-	bprimitive { $$ = $1; }
+	| bprimitive { $$ = $1; }
 ;
 
 

@@ -86,24 +86,23 @@ class unary_minus_node : public exp_node {
   float evaluate();
 };
 
-////Boolean NOT node
-//class not_node : public boolean_operator_node {
-//protected:
-//    bexp_node *bexp;
-//public:
-//	not_node(bexp_node *bexp);
-//	void print();
-//	bool evaluate();
-//};
+//Boolean NOT node
+class not_node : public bexp_node {
+    protected:
+        bexp_node *bexp;
+    public:
+	    not_node(bexp_node *bexp);
+	    void print();
+	    bool evaluate();
+};
 
 class id_node : public exp_node {
-protected:
-  string id;
-
-public:
-  id_node(string value);
-  void print();
-  float evaluate();
+    protected:
+        string id;
+    public:
+        id_node(string value);
+        void print();
+        float evaluate();
 };
 
 class boolean_id_node : public bexp_node {

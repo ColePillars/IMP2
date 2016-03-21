@@ -276,21 +276,18 @@ float unary_minus_node::evaluate() {
   return  -expValue;
 }
 
-//not_node::not_node(bexp_node *bexp) {}
-//
-//void not_node:: print() {
-//  cout << "! ( ";
-//  bexp->print();
-//  cout << " )";
-//}
-//
-//bool not_node::evaluate() {
-//    bool expValue = bexp->evaluate();
-//    return  !bexp;
-//}
+not_node::not_node(bexp_node *myexp) : bexp(myexp)  {}
 
+void not_node:: print() {
+    cout << "! ( ";
+    bexp->print();
+    cout << " )";
+}
 
-
+bool not_node::evaluate() {
+    bool var = bexp->evaluate();
+    return  !var;
+}
 
 assignment_stmt::assignment_stmt(string name, exp_node *expression)
   : id(name), exp(expression) {}
@@ -311,7 +308,7 @@ boolean_assignment_stmt::boolean_assignment_stmt(string name, bexp_node *express
   : id(name), bexp(expression) {}
 
 void boolean_assignment_stmt::print() {
-    cout << id << " = ";
+    cout << id << " $= ";
     bexp->print();
 }
 
