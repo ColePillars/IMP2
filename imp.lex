@@ -72,6 +72,12 @@ print   { return PRINT; }
 "=="    { return EQUALS_EQUALS;	    }
 ">="    { return GREATER_OR_EQUALS; }
 
+"if"    {return IF;}
+"then"  {return THEN;}
+"else"  {return ELSE;}
+"while" {return WHILE;}
+"do"    {return DO;}
+
 . { BEGIN(ERROR); yymore(); }
 <ERROR>[^{DIGIT}{LETTER}+\-/*(){}= \t\n\f\r] { yymore(); }
 <ERROR>(.|\n) { yyless(yyleng-1); printf("error token: %s on line %d\n", yytext, line_num); 
