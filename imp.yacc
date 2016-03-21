@@ -6,11 +6,10 @@
 
    pgm -> stmtlist
    stmtlist -> stmt | stmtlist ; stmt
-   stmt -> id = exp 
-        |  print id
+   stmt -> id = exp |  print id
    exp -> exp + mulexp | exp - mulexp 
    mulexp -> mulexp * primexp | mulexp / primexp
-   primexp ->  ( exp ) | ( exp ) | - primexp | id | number 
+   primexp ->  ( exp ) | ( exp ) | - primexp | id | number | input
 */
 
 #include <iostream>
@@ -45,7 +44,9 @@ void yyerror(const char * s);
   float num;
   float input;
   char *id;
+
   exp_node *exp_node_ptr;
+  bexp_node *bexp_node_ptr;
   statement *st;
 }
 
@@ -55,9 +56,15 @@ void yyerror(const char * s);
 %token <id> ID
 %token <input> INPUT
 %token SEMICOLON  EQUALS PRINT  PLUS MINUS TIMES DIVIDE  LPAREN RPAREN LBRACE RBRACE
+%token AND OR NOT EQUALS_EQUALS GREATER_OR_EQUALS TRUE FALSE
 %type <exp_node_ptr> exp
 %type <exp_node_ptr> mulexp
-%type <exp_node_ptr> primexp 
+%type <exp_node_ptr> primexp
+%type <bexp_node_ptr> bexp
+%type <bexp_node_ptr> bmulexp
+%type <bexp_node_ptr> btermexp
+%type <bexp_node_ptr> bprimitive
+%type <bexp_node_ptr> boolean
 %type <st> stmtlist
 %type <st> stmt
 %type <st> program
@@ -79,18 +86,18 @@ stmtlist : stmtlist SEMICOLON stmt
 	 { $$ = $1;   }
 ;
 
-stmt: ID EQUALS exp { 
-  $$ = new assignment_stmt($1, $3);
-	   }
-       
-| PRINT exp {
-  $$ = new print_stmt($2);
- }
+stmt:
+        ID EQUALS exp { $$ = new assignment_stmt($1, $3); }
 
-|
-{ $$ = new skip_stmt();
-}
-| LBRACE stmtlist RBRACE { $$=$2; } 
+      	| PRINT exp { $$ = new print_stmt($2); }
+
+      	| ID EQUALS bexp { $$ = new boolean_assignment_stmt($1, $3); }
+
+      	| PRINT bexp { $$ = new boolean_print_stmt($2); }
+
+      	| { $$ = new skip_stmt(); }
+
+      	| LBRACE stmtlist RBRACE { $$=$2; }
  ;
 
 
@@ -124,7 +131,45 @@ primexp:	MINUS primexp %prec UMINUS { $$ = new unary_minus_node($2); }
 
       | INPUT { $$ = new input_node($1); }
 ;
- 
+
+
+bexp:
+	bexp OR bmulexp { $$ = new or_node($1, $3); }
+
+	| bmulexp { $$ = $1; }
+;
+
+
+bmulexp:
+	bmulexp AND btermexp { $$ = new and_node ($1, $3); }
+
+	| btermexp { $$ = $1; }
+;
+
+
+btermexp:
+	NOT btermexp { $$ = new not_node($2); }
+
+	| bprimitive { $$ = $1; }
+;
+
+
+bprimitive:
+	LPAREN bexp RPAREN { $$ = $2; }
+
+	| bexp EQUALS_EQUALS bexp { $$ = new equals_equals_node($1, $3); }
+
+	| boolean { $$ = $1; }
+;
+
+
+boolean:
+	TRUE    { $$ = new true_node($$);   }
+	|
+	FALSE   { $$ = new false_node($$);  }
+;
+
+
 %%
 int main(int argc, char **argv)
 { 

@@ -3,3 +3,5 @@ y=13;
 z=input;
 print -x*y;
 print x/z;
+x = true;
+true && false;

@@ -16,6 +16,16 @@ class exp_node {
     virtual float evaluate() = 0;
 };
 
+class bexp_node {
+public:
+
+	//print function for Boolean expressions
+	virtual void print() = 0;
+
+	//evaluation function for Booelan expressions
+	virtual bool evaluate() = 0;
+};
+
 class operator_node : public exp_node {
 public:
     exp_node *left;
@@ -24,6 +34,14 @@ public:
   // the constructor for node links the node to its children,
   // and stores the character representation of the operator.
     operator_node(exp_node *L, exp_node *R);
+};
+
+class boolean_operator_node : public bexp_node {
+public:
+    bexp_node *left;
+    bexp_node *right;
+
+    boolean_operator_node(bexp_node *L, bexp_node *R);
 };
 
 class number_node : public exp_node {
@@ -55,6 +73,16 @@ class unary_minus_node : public exp_node {
   float evaluate();
 };
 
+//Boolean NOT node
+class not_node : public boolean_operator_node {
+protected:
+    bexp_node *bexp;
+public:
+	not_node(bexp_node *bexp);
+	void print();
+	bool evaluate();
+};
+
 class id_node : public exp_node {
 protected:
   string id;
@@ -76,6 +104,27 @@ class plus_node : public operator_node {
 };
 
 
+class or_node : public boolean_operator_node {
+  public:
+  or_node(bexp_node *L, bexp_node *R);
+  void print();
+  bool evaluate();
+};
+
+class true_node : public bexp_node {
+public:
+    true_node();
+    void print();
+    bool evaluate();
+};
+
+class false_node : public bexp_node {
+  public:
+  false_node();
+  void print();
+  bool evaluate();
+};
+
 // minus_node inherits the characteristics of node and adds its own evaluate function
 class minus_node : public operator_node {
   public:
@@ -95,6 +144,29 @@ class times_node : public operator_node {
   float evaluate();
 };
 
+//Boolean AND node
+class and_node : public boolean_operator_node {
+public:
+	and_node(bexp_node *L, bexp_node *R);
+	void print();
+	bool evaluate();
+};
+
+//Boolean EQUALS EQUALS node
+class equals_equals_node : public boolean_operator_node {
+public:
+	equals_equals_node(bexp_node *L, bexp_node *R);
+	void print();
+	bool evaluate();
+};
+
+////Boolean GREATER OR EQUALS node
+//class greater_or_equals_node : public operator_node {
+//public:
+//	greater_or_equals_node(exp_node *L, exp_node *R);
+//	void print();
+//	bool evaluate();
+//};
 
 // divide_node inherits the characteristics of node and adds its own evaluate function
 class divide_node : public operator_node {
@@ -121,11 +193,30 @@ class assignment_stmt : public statement {
   void evaluate();
 };
 
+class boolean_assignment_stmt : public statement {
+protected:
+	string id;
+	bexp_node *bexp;
+public:
+	boolean_assignment_stmt(string name, bexp_node *expression);
+	void print();
+	void evaluate();
+};
+
 class print_stmt: public statement {
  protected:
   exp_node *exp;
  public:
   print_stmt(exp_node *myexp);
+  void print();
+  void evaluate();
+};
+
+class boolean_print_stmt: public statement {
+ protected:
+  bexp_node *bexp;
+ public:
+  boolean_print_stmt(bexp_node *myexp);
   void print();
   void evaluate();
 };

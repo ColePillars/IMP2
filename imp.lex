@@ -51,17 +51,27 @@ print   { return PRINT; }
 
 [ \t\f\r]	;		 // ignore white space 
 
-\n      { line_num++; }
-"-"	{ return MINUS;  }
-"+"	{ return PLUS;   }
-"*"	{ return TIMES;  }
-"/"	{ return DIVIDE; }
-"("	{ return LPAREN; }
-")"	{ return RPAREN; }
-"{"	{ return LBRACE; }
-"}"	{ return RBRACE; }
-"="     { return EQUALS; }
-";"    {return SEMICOLON;}
+\n  { line_num++;       }
+"-"	{ return MINUS;     }
+"+"	{ return PLUS;      }
+"*"	{ return TIMES;     }
+"/"	{ return DIVIDE;    }
+"("	{ return LPAREN;    }
+")"	{ return RPAREN;    }
+"{"	{ return LBRACE;    }
+"}"	{ return RBRACE;    }
+"=" { return EQUALS;    }
+";" { return SEMICOLON; }
+
+"&&" { return AND;			     }
+"||" { return OR;				 }
+"!"  { return NOT;				 }
+"==" { return EQUALS_EQUALS;	 }
+">=" { return GREATER_OR_EQUALS; }
+
+"true"  { return TRUE;  }
+"false" { return FALSE; }
+
 
 . { BEGIN(ERROR); yymore(); }
 <ERROR>[^{DIGIT}{LETTER}+\-/*(){}= \t\n\f\r] { yymore(); }
