@@ -297,6 +297,70 @@ void assignment_stmt::print() {
   exp->print();
  
 }
+//-----------If-Else Statement-------------
+//if_than_stmt inherits the characteristic nodes and evalutates it works with imp.h file
+
+//Constructor for all three conditions for if else statement. 
+if_else_stmt::if_else_stmt(bexp_node *bexp, statement *stmtlist1, statement *stmtlist2)
+{
+	this->bexp = bexp;
+	this->stmtlist1 = stmtlist1;
+	this->stmtlist2 = stmtlist2;
+}
+//Prints out the if-else statement.
+void if_else_stmt::print()
+{
+	cout << "if ";
+	this->bexp->print();
+	cout << endl;
+
+	cout << "then ";
+	this->stmtlist1->print();
+	cout << endl;
+
+	cout << "eles ";
+	this->stmtlist2->print();
+	cout << endl;
+}
+//Evaluates the condition and statements through an if-else statement
+void if_else_stmt::evaluate()
+{
+	if (this->bexp->evaluate())
+	{
+		this->stmtlist1->evaluate();
+	}
+	else
+	{
+		this->stmtlist2->evaluate();
+	}
+
+}
+//-------------While Statement-------------------
+
+//While statement constructor.
+while_do_stmt::while_do_stmt(bexp_node *bexp, statement *stmtlist1)
+{
+	this->bexp = bexp;
+	this->stmtlist1 = stmtlist1;
+}
+//Prints of out the while statement.
+void while_do_stmt::print()
+{
+	cout << "while ( ";
+	this->bexp->print();
+	cout << " )" << endl;
+	cout << "do: " << endl;
+	this->stmtlist1->print();
+	cout << endl;
+}
+//Evaluate the condition and the do statement in a while loop.
+void while_do_stmt::evaluate()
+{
+	while (this->bexp->evaluate())
+	{
+		this->stmtlist1->evaluate();
+	}
+}
 
 void assignment_stmt::evaluate() {
   float result = exp->evaluate();
