@@ -106,6 +106,16 @@ public:
   float evaluate();
 };
 
+class boolean_id_node : public bexp_node {
+protected:
+    string id;
+
+public:
+    boolean_id_node(string value);
+    void print();
+    bool evaluate();
+};
+
 // plus_node inherits the characteristics of node and adds its own evaluate function
 class plus_node : public operator_node {
   public:

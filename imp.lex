@@ -65,11 +65,12 @@ print   { return PRINT; }
 "=" { return EQUALS;    }
 ";" { return SEMICOLON; }
 
-"&&" { return AND;			     }
-"||" { return OR;				 }
-"!"  { return NOT;				 }
-"==" { return EQUALS_EQUALS;	 }
-">=" { return GREATER_OR_EQUALS; }
+"$="    { return B_EQUALS;          }
+"&&"    { return AND;			    }
+"||"    { return OR;				}
+"!"     { return NOT;			    }
+"=="    { return EQUALS_EQUALS;	    }
+">="    { return GREATER_OR_EQUALS; }
 
 . { BEGIN(ERROR); yymore(); }
 <ERROR>[^{DIGIT}{LETTER}+\-/*(){}= \t\n\f\r] { yymore(); }

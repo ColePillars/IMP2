@@ -59,7 +59,7 @@ void yyerror(const char * s);
 %token <input> INPUT
 %token <true1> TRUE
 %token <false1> FALSE
-%token SEMICOLON  EQUALS PRINT  PLUS MINUS TIMES DIVIDE  LPAREN RPAREN LBRACE RBRACE
+%token SEMICOLON  EQUALS PRINT  PLUS MINUS TIMES DIVIDE  LPAREN RPAREN LBRACE RBRACE B_EQUALS
 %token AND OR NOT EQUALS_EQUALS GREATER_OR_EQUALS
 %type <exp_node_ptr> exp
 %type <exp_node_ptr> mulexp
@@ -91,7 +91,7 @@ stmt:
 
     | PRINT exp { $$ = new print_stmt($2); }
 
-    | ID EQUALS bexp { $$ = new boolean_assignment_stmt($1, $3); }
+    | ID B_EQUALS bexp { $$ = new boolean_assignment_stmt($1, $3); }
 
     | PRINT bexp { $$ = new boolean_print_stmt($2); }
 
@@ -159,6 +159,8 @@ bprimitive:
 	LPAREN bexp RPAREN { $$ = $2; }
 
 	| bexp EQUALS_EQUALS bexp { $$ = new equals_equals_node($1, $3); }
+
+	| ID { $$ = new boolean_id_node($1); }
 
 	| TRUE    { $$ = new true_node();   }
 

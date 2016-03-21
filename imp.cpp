@@ -69,15 +69,25 @@ float input_node:: evaluate() {
     return num;
 }
 
-  id_node::id_node(string value) : id(value) {}
+id_node::id_node(string value) : id(value) {}
 
 void id_node:: print() {
-  cout << id;
+    cout << id;
 }
 
-  float id_node::evaluate() { 
-    return idTable[id]; 
-  }
+float id_node::evaluate() {
+    return idTable[id];
+}
+
+boolean_id_node::boolean_id_node(string value) : id(value) {}
+
+void boolean_id_node:: print() {
+    cout << id;
+}
+
+bool boolean_id_node::evaluate() {
+    return idTable[id];
+}
 
 // plus_node inherits the characteristics of node and adds its own evaluate function
   // plus_node's constructor just uses node's constructor
