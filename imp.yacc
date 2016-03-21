@@ -6,10 +6,18 @@
 
    pgm -> stmtlist
    stmtlist -> stmt | stmtlist ; stmt
-   stmt -> id = exp | print id | id $= bexp | print bexp | if bexp then
+   stmt -> id = exp | print id | id $= bexp | print bexp |
+           if (bexp) then stmtlist else stmtlist |
+           while (bexp) do stmtlist
+
    exp -> exp + mulexp | exp - mulexp 
    mulexp -> mulexp * primexp | mulexp / primexp
    primexp ->  ( exp ) | ( exp ) | - primexp | id | number | input
+
+   bexp -> bexp || bmulexp | bmulexp
+   bmulexp -> bmulexp && btermexp | btermexp
+   btermexp -> !bterm | bprimitive
+   bprimitive -> (bexp) | bexp == bexp | id | true | false
 
 
 */
