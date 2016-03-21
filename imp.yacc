@@ -98,8 +98,10 @@ stmt:
     | { $$ = new skip_stmt(); }
 
     | LBRACE stmtlist RBRACE { $$=$2; }
-    |IF bexp THEN stmtlist ELSE stmtlist {$$ = new if_else_stmt($2, $4, $6);}
-    |WHILE bexp DO stmtlist {$$ = new while_do_stmt($2, $4);}
+
+    | IF bexp THEN stmtlist ELSE stmtlist {$$ = new if_else_stmt($2, $4, $6);}
+
+    | WHILE bexp DO stmtlist {$$ = new while_do_stmt($2, $4);}
 ;
 
 

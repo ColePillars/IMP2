@@ -40,9 +40,14 @@ LETTER [a-zA-Z]
 %}
 
 print   { return PRINT; }
-"input"   { return INPUT; }
+"input" { return INPUT; }
 "true"  { return TRUE;  }
 "false" { return FALSE; }
+"if"    { return IF;    }
+"then"  { return THEN;  }
+"else"  { return ELSE;  }
+"while" { return WHILE; }
+"do"    { return DO;    }
 {DIGIT}+ {
 	yylval.num = atof(yytext); return NUMBER;
 	}
@@ -72,11 +77,6 @@ print   { return PRINT; }
 "=="    { return EQUALS_EQUALS;	    }
 ">="    { return GREATER_OR_EQUALS; }
 
-"if"    {return IF;}
-"then"  {return THEN;}
-"else"  {return ELSE;}
-"while" {return WHILE;}
-"do"    {return DO;}
 
 . { BEGIN(ERROR); yymore(); }
 <ERROR>[^{DIGIT}{LETTER}+\-/*(){}= \t\n\f\r] { yymore(); }
