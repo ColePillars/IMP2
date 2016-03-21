@@ -60,7 +60,7 @@ void yyerror(const char * s);
 %token <true1> TRUE
 %token <false1> FALSE
 %token SEMICOLON  EQUALS PRINT  PLUS MINUS TIMES DIVIDE  LPAREN RPAREN LBRACE RBRACE B_EQUALS
-%token AND OR NOT EQUALS_EQUALS GREATER_OR_EQUALS
+%token AND OR NOT EQUALS_EQUALS GREATER_OR_EQUALS IF THEN ELSE WHILE DO
 %type <exp_node_ptr> exp
 %type <exp_node_ptr> mulexp
 %type <exp_node_ptr> primexp
@@ -98,6 +98,8 @@ stmt:
     | { $$ = new skip_stmt(); }
 
     | LBRACE stmtlist RBRACE { $$=$2; }
+    |IF bexp THEN stmtlist ELSE stmtlist {$$ = new if_else_stmt($2, $4, $6);}
+    |WHILE bexp DO stmtlist {$$ = new while_do_stmt($2, $4);}
 ;
 
 
