@@ -44,6 +44,8 @@ void yyerror(const char * s);
   float num;
   float input;
   char *id;
+  bool true1;
+  bool false1;
 
   exp_node *exp_node_ptr;
   bexp_node *bexp_node_ptr;
@@ -55,8 +57,10 @@ void yyerror(const char * s);
 %token <num> NUMBER
 %token <id> ID
 %token <input> INPUT
+%token <true1> TRUE
+%token <false1> FALSE
 %token SEMICOLON  EQUALS PRINT  PLUS MINUS TIMES DIVIDE  LPAREN RPAREN LBRACE RBRACE
-%token AND OR NOT EQUALS_EQUALS GREATER_OR_EQUALS TRUE FALSE
+%token AND OR NOT EQUALS_EQUALS GREATER_OR_EQUALS
 %type <exp_node_ptr> exp
 %type <exp_node_ptr> mulexp
 %type <exp_node_ptr> primexp
@@ -64,72 +68,69 @@ void yyerror(const char * s);
 %type <bexp_node_ptr> bmulexp
 %type <bexp_node_ptr> btermexp
 %type <bexp_node_ptr> bprimitive
-%type <bexp_node_ptr> boolean
 %type <st> stmtlist
 %type <st> stmt
 %type <st> program
 
 %%
 
-program : stmtlist { root = $$; }
+program :
+    stmtlist { root = $$; }
 ;
 
-stmtlist : stmtlist SEMICOLON stmt
-            { // copy up the list and add the stmt to it
-              $$ = new sequence_stmt($1,$3);
-            }
-         | stmtlist SEMICOLON error
-	   { // just copy up the stmtlist when an error occurs
-             $$ = $1;
-             yyclearin; } 
-         |  stmt 
-	 { $$ = $1;   }
+stmtlist :
+    stmtlist SEMICOLON stmt { $$ = new sequence_stmt($1,$3); }
+
+    | stmtlist SEMICOLON error { $$ = $1; yyclearin; }
+
+    |  stmt { $$ = $1;   }
 ;
 
 stmt:
-        ID EQUALS exp { $$ = new assignment_stmt($1, $3); }
+    ID EQUALS exp { $$ = new assignment_stmt($1, $3); }
 
-      	| PRINT exp { $$ = new print_stmt($2); }
+    | PRINT exp { $$ = new print_stmt($2); }
 
-      	| ID EQUALS bexp { $$ = new boolean_assignment_stmt($1, $3); }
+    | ID EQUALS bexp { $$ = new boolean_assignment_stmt($1, $3); }
 
-      	| PRINT bexp { $$ = new boolean_print_stmt($2); }
+    | PRINT bexp { $$ = new boolean_print_stmt($2); }
 
-      	| { $$ = new skip_stmt(); }
+    | { $$ = new skip_stmt(); }
 
-      	| LBRACE stmtlist RBRACE { $$=$2; }
+    | LBRACE stmtlist RBRACE { $$=$2; }
  ;
 
 
-exp:	exp PLUS mulexp { $$ = new plus_node($1, $3); }
+exp:
+    exp PLUS mulexp { $$ = new plus_node($1, $3); }
 
-      |	exp MINUS mulexp { $$ = new minus_node($1, $3); }
+    | exp MINUS mulexp { $$ = new minus_node($1, $3); }
 
-      |	mulexp {  $$ = $1; }
+    | mulexp {  $$ = $1; }
 ;
 
 
 
-mulexp:	mulexp TIMES primexp {
-	  $$ = new times_node($1, $3); }
+mulexp:
+    mulexp TIMES primexp { $$ = new times_node($1, $3); }
 
-      | mulexp DIVIDE primexp {
-	  $$ = new divide_node($1, $3); }
+    | mulexp DIVIDE primexp { $$ = new divide_node($1, $3); }
 
-      | primexp { $$=$1;  }
+    | primexp { $$=$1;  }
 ;
 
 
 
-primexp:	MINUS primexp %prec UMINUS { $$ = new unary_minus_node($2); }
+primexp:
+    MINUS primexp %prec UMINUS { $$ = new unary_minus_node($2); }
 
-      |	LPAREN exp RPAREN  {  $$ = $2; }
+    | LPAREN exp RPAREN  {  $$ = $2; }
 
-      |	NUMBER { $$ = new number_node($1); }
+    | NUMBER { $$ = new number_node($1); }
 
-      | ID { $$ = new id_node($1); }
+    | ID { $$ = new id_node($1); }
 
-      | INPUT { $$ = new input_node($1); }
+    | INPUT { $$ = new input_node($1); }
 ;
 
 
@@ -148,9 +149,9 @@ bmulexp:
 
 
 btermexp:
-	NOT btermexp { $$ = new not_node($2); }
+	//NOT btermexp { $$ = new not_node($2); } |
 
-	| bprimitive { $$ = $1; }
+	bprimitive { $$ = $1; }
 ;
 
 
@@ -159,14 +160,9 @@ bprimitive:
 
 	| bexp EQUALS_EQUALS bexp { $$ = new equals_equals_node($1, $3); }
 
-	| boolean { $$ = $1; }
-;
+	| TRUE    { $$ = new true_node();   }
 
-
-boolean:
-	TRUE    { $$ = new true_node($$);   }
-	|
-	FALSE   { $$ = new false_node($$);  }
+    | FALSE   { $$ = new false_node();  }
 ;
 
 

@@ -7,8 +7,7 @@
 using namespace std;
 
 class exp_node {
-  public:
-
+public:
     // print function for pretty printing an expression
     virtual void print() = 0;
 
@@ -22,7 +21,7 @@ public:
 	//print function for Boolean expressions
 	virtual void print() = 0;
 
-	//evaluation function for Booelan expressions
+	//evaluation function for Boolean expressions
 	virtual bool evaluate() = 0;
 };
 
@@ -45,13 +44,27 @@ public:
 };
 
 class number_node : public exp_node {
- private:
+private:
     float num;
 
- public:
+public:
   number_node(float value);
   void print();
   float evaluate();
+};
+
+class true_node : public bexp_node {
+public:
+    true_node();
+    void print();
+    bool evaluate();
+};
+
+class false_node : public bexp_node {
+public:
+    false_node();
+    void print();
+    bool evaluate();
 };
 
 class input_node : public exp_node {
@@ -73,15 +86,15 @@ class unary_minus_node : public exp_node {
   float evaluate();
 };
 
-//Boolean NOT node
-class not_node : public boolean_operator_node {
-protected:
-    bexp_node *bexp;
-public:
-	not_node(bexp_node *bexp);
-	void print();
-	bool evaluate();
-};
+////Boolean NOT node
+//class not_node : public boolean_operator_node {
+//protected:
+//    bexp_node *bexp;
+//public:
+//	not_node(bexp_node *bexp);
+//	void print();
+//	bool evaluate();
+//};
 
 class id_node : public exp_node {
 protected:
@@ -111,19 +124,7 @@ class or_node : public boolean_operator_node {
   bool evaluate();
 };
 
-class true_node : public bexp_node {
-public:
-    true_node();
-    void print();
-    bool evaluate();
-};
 
-class false_node : public bexp_node {
-  public:
-  false_node();
-  void print();
-  bool evaluate();
-};
 
 // minus_node inherits the characteristics of node and adds its own evaluate function
 class minus_node : public operator_node {
@@ -165,7 +166,7 @@ public:
 //public:
 //	greater_or_equals_node(exp_node *L, exp_node *R);
 //	void print();
-//	bool evaluate();
+//	float evaluate();
 //};
 
 // divide_node inherits the characteristics of node and adds its own evaluate function

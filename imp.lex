@@ -41,6 +41,8 @@ LETTER [a-zA-Z]
 
 print   { return PRINT; }
 "input"   { return INPUT; }
+"true"  { return TRUE;  }
+"false" { return FALSE; }
 {DIGIT}+ {
 	yylval.num = atof(yytext); return NUMBER;
 	}
@@ -68,10 +70,6 @@ print   { return PRINT; }
 "!"  { return NOT;				 }
 "==" { return EQUALS_EQUALS;	 }
 ">=" { return GREATER_OR_EQUALS; }
-
-"true"  { return TRUE;  }
-"false" { return FALSE; }
-
 
 . { BEGIN(ERROR); yymore(); }
 <ERROR>[^{DIGIT}{LETTER}+\-/*(){}= \t\n\f\r] { yymore(); }

@@ -9,28 +9,49 @@ using namespace std;
 
   // the constructor for node links the node to its children,
   // and stores the character representation of the operator.
-  operator_node::operator_node(exp_node *L, exp_node *R) {
+operator_node::operator_node(exp_node *L, exp_node *R) {
     left    = L;
     right   = R;
-  }
-
-  //Boolean operator node
-  boolean_operator_node::boolean_operator_node(bexp_node *L, bexp_node *R) {
-  	left    = L;
-      right   = R;
-  }
-
-  
-  number_node::number_node(float value) {
-    num = value;
-   }
-  
-void number_node:: print() {
-  cout << num;
 }
 
-  float number_node::evaluate() {
-    return num; }
+  //Boolean operator node
+boolean_operator_node::boolean_operator_node(bexp_node *L, bexp_node *R) {
+    left    = L;
+    right   = R;
+}
+
+  
+number_node::number_node(float value) {
+    num = value;
+}
+  
+void number_node:: print() {
+    cout << num;
+}
+
+float number_node::evaluate() {
+    return num;
+}
+
+true_node::true_node() { }
+
+void true_node:: print() {
+    cout << " True ";
+}
+
+bool true_node::evaluate() {
+    return true;
+}
+
+false_node::false_node() { }
+
+void false_node:: print() {
+    cout << " False ";
+}
+
+bool false_node::evaluate() {
+    return false;
+}
 
 
 input_node::input_node(float value) {
@@ -81,49 +102,45 @@ void plus_node:: print() {
 
   }
 
-  or_node::or_node(bexp_node *L, bexp_node *R) : boolean_operator_node(L,R) {
-  }
+or_node::or_node(bexp_node *L, bexp_node *R) : boolean_operator_node(L,R) {}
 
 void or_node:: print() {
-  cout << "(";
-  left->print();
-  cout << " || ";
-  right->print();
-  cout << ")";
+    cout << "(";
+    left->print();
+    cout << " || ";
+    right->print();
+    cout << ")";
 }
 
-  bool or_node::evaluate() {
+bool or_node::evaluate() {
     bool left_num, right_num;
 
     left_num  = left->evaluate();
     right_num = right->evaluate();
 
     return left_num || right_num;
-
-  }
+}
 
 
 // minus_node inherits the characteristics of node and adds its own evaluate function
-  minus_node::minus_node(exp_node *L, exp_node *R) : operator_node(L,R) {
-  }
+minus_node::minus_node(exp_node *L, exp_node *R) : operator_node(L,R) { }
 
 void minus_node:: print() {
-  cout << "(";
-  left->print();
-  cout << " - ";
-  right->print();
-  cout << ")";
+    cout << "(";
+    left->print();
+    cout << " - ";
+    right->print();
+    cout << ")";
 }
 
-  float minus_node::evaluate() {
+float minus_node::evaluate() {
     float left_num, right_num;
 
     left_num  = left->evaluate();
     right_num = right->evaluate();
 
     return  left_num - right_num;
-
-  }
+}
 
 
 // times_node inherits the characteristics of node and adds its own evaluate function
@@ -148,42 +165,42 @@ void times_node:: print() {
 
   }
 
-  and_node::and_node(bexp_node *L, bexp_node *R) : boolean_operator_node(L,R) {}
+and_node::and_node(bexp_node *L, bexp_node *R) : boolean_operator_node(L,R) {}
 
-  void and_node:: print() {
-  	cout << "(";
+void and_node:: print() {
+    cout << "(";
   	left->print();
   	cout << " && ";
   	right->print();
   	cout << ")";
-  }
+}
 
-  bool and_node::evaluate() {
-      bool left_num, right_num;
+bool and_node::evaluate() {
+    bool left_num, right_num;
 
-      left_num = left->evaluate();
-      right_num = right->evaluate();
+    left_num = left->evaluate();
+    right_num = right->evaluate();
 
-      return left_num && right_num;
-  }
+    return left_num && right_num;
+}
 
-  equals_equals_node::equals_equals_node(bexp_node *L, bexp_node *R) : boolean_operator_node(L,R) {}
+equals_equals_node::equals_equals_node(bexp_node *L, bexp_node *R) : boolean_operator_node(L,R) {}
 
-  void equals_equals_node:: print() {
+void equals_equals_node:: print() {
   	cout << "(";
   	left->print();
   	cout << " == ";
   	right->print();
   	cout << ")";
-  }
+}
 
-  bool equals_equals_node::evaluate() {
-      bool left_num, right_num;
+bool equals_equals_node::evaluate() {
+    bool left_num, right_num;
 
-      left_num = left->evaluate();
-      right_num = right->evaluate();
+    left_num = left->evaluate();
+    right_num = right->evaluate();
 
-      return left_num == right_num;
+    return left_num == right_num;
   }
 
 //  greater_or_equals_node::greater_or_equals_node(exp_node *L, exp_node *R) : operator_node(L,R) {}
@@ -196,7 +213,7 @@ void times_node:: print() {
 //  	cout << ")";
 //  }
 //
-//  bool greater_or_equals_node::evaluate() {
+//  float greater_or_equals_node::evaluate() {
 //       float left_num, right_num;
 //
 //      left_num = left->evaluate();
@@ -249,38 +266,20 @@ float unary_minus_node::evaluate() {
   return  -expValue;
 }
 
-//not_node::not_node(bexp_node *bexp) : bexp(bexp) {}
+//not_node::not_node(bexp_node *bexp) {}
+//
+//void not_node:: print() {
+//  cout << "! ( ";
+//  bexp->print();
+//  cout << " )";
+//}
+//
+//bool not_node::evaluate() {
+//    bool expValue = bexp->evaluate();
+//    return  !bexp;
+//}
 
-void not_node:: print() {
-  cout << "! ( ";
-  bexp->print();
-  cout << " )";
-}
 
-bool not_node::evaluate() {
-  bool expValue = bexp->evaluate();
-  return  !bexp;
-}
-
-true_node::true_node() {}
-
-void true_node:: print() {
-    cout << " True ";
-}
-
-bool true_node::evaluate() {
-    return  true;
-}
-
-false_node::false_node() {}
-
-void false_node:: print() {
-    cout << " False ";
-}
-
-bool false_node::evaluate() {
-    return  false;
-}
 
 
 assignment_stmt::assignment_stmt(string name, exp_node *expression)
@@ -302,13 +301,13 @@ boolean_assignment_stmt::boolean_assignment_stmt(string name, bexp_node *express
   : id(name), bexp(expression) {}
 
 void boolean_assignment_stmt::print() {
-  cout << id << " = ";
-  bexp->print();
+    cout << id << " = ";
+    bexp->print();
 }
 
 void boolean_assignment_stmt::evaluate() {
-  bool result = bexp->evaluate();
-  idTable[id] = result;
+    bool result = bexp->evaluate();
+    idTable[id] = result;
 }
 
 print_stmt::print_stmt (exp_node *myexp) : exp(myexp) {}
@@ -326,13 +325,13 @@ print_stmt::print_stmt (exp_node *myexp) : exp(myexp) {}
 boolean_print_stmt::boolean_print_stmt (bexp_node *myexp) : bexp(myexp) {}
 
 void boolean_print_stmt::print() {
-  cout <<  "print ";
-  bexp->print();
+    cout <<  "print ";
+    bexp->print();
 }
 
 
 void boolean_print_stmt::evaluate() {
-  cout << "output: " << bexp->evaluate() << endl << endl;
+    cout << "output: " << bexp->evaluate() << endl << endl;
 }
 
 skip_stmt::skip_stmt ()  {}
