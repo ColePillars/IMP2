@@ -2,9 +2,22 @@ a $= true;
 b $= false;
 c $= b;
 d $= (a || b);
+e $= (a && b);
+f $= (a == b);
+g $= (a == true);
+
+x = input;
+y = input;
+
 print a;
 print b;
 print c;
 print d;
-print a&&b;
-print a||b;
+print e;
+print f;
+print g;
+
+print x/y;
+print x*y;
+print x-y;
+print x+y;
