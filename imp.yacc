@@ -6,10 +6,12 @@
 
    pgm -> stmtlist
    stmtlist -> stmt | stmtlist ; stmt
-   stmt -> id = exp |  print id
+   stmt -> id = exp | print id | id $= bexp | print bexp | if bexp then
    exp -> exp + mulexp | exp - mulexp 
    mulexp -> mulexp * primexp | mulexp / primexp
    primexp ->  ( exp ) | ( exp ) | - primexp | id | number | input
+
+
 */
 
 #include <iostream>
@@ -99,9 +101,9 @@ stmt:
 
     | LBRACE stmtlist RBRACE { $$=$2; }
 
-    | IF bexp THEN stmtlist ELSE stmtlist {$$ = new if_else_stmt($2, $4, $6);}
+    | IF LPAREN bexp RPAREN THEN stmtlist ELSE stmtlist {$$ = new if_else_stmt($3, $6, $8);}
 
-    | WHILE bexp DO stmtlist {$$ = new while_do_stmt($2, $4);}
+    | WHILE LPAREN bexp RPAREN DO stmtlist {$$ = new while_do_stmt($3, $6);}
 ;
 
 

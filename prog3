@@ -1,7 +1,13 @@
 a $= false;
 
-if a then print a; else print 10;;
-
+if (a) then
+print a;
+else
+print 10;
+;
 
 b = 0;
-while true do print b; b = b + 1;;
+while (true) do
+print b;
+b = b + 1;
+;
