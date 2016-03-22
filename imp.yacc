@@ -6,10 +6,20 @@
 
    pgm -> stmtlist
    stmtlist -> stmt | stmtlist ; stmt
-   stmt -> id = exp |  print id
+   stmt -> id = exp | print id | id $= bexp | print bexp |
+           if (bexp) then stmtlist else stmtlist |
+           while (bexp) do stmtlist
+
    exp -> exp + mulexp | exp - mulexp 
    mulexp -> mulexp * primexp | mulexp / primexp
    primexp ->  ( exp ) | ( exp ) | - primexp | id | number | input
+
+   bexp -> bexp || bmulexp | bmulexp
+   bmulexp -> bmulexp && btermexp | btermexp
+   btermexp -> !bterm | bprimitive
+   bprimitive -> (bexp) | bexp == bexp | exp > exp | id | true | false
+
+
 */
 
 #include <iostream>
@@ -60,13 +70,14 @@ void yyerror(const char * s);
 %token <true1> TRUE
 %token <false1> FALSE
 %token SEMICOLON  EQUALS PRINT  PLUS MINUS TIMES DIVIDE  LPAREN RPAREN LBRACE RBRACE B_EQUALS
-%token AND OR NOT EQUALS_EQUALS GREATER_OR_EQUALS
+%token AND OR NOT EQUALS_EQUALS GREATER EQUIVALENT IF THEN ELSE WHILE DO
 %type <exp_node_ptr> exp
 %type <exp_node_ptr> mulexp
 %type <exp_node_ptr> primexp
 %type <bexp_node_ptr> bexp
 %type <bexp_node_ptr> bmulexp
 %type <bexp_node_ptr> btermexp
+%type <bexp_node_ptr> bequal
 %type <bexp_node_ptr> bprimitive
 %type <st> stmtlist
 %type <st> stmt
@@ -98,11 +109,19 @@ stmt:
     | { $$ = new skip_stmt(); }
 
     | LBRACE stmtlist RBRACE { $$=$2; }
+
+    | IF LPAREN exp RPAREN THEN stmtlist ELSE stmtlist {$$ = new if_else_stmt($3, $6, $8);}
+
+    | WHILE LPAREN exp RPAREN DO stmtlist {$$ = new while_do_stmt($3, $6);}
 ;
 
 
 exp:
     exp PLUS mulexp { $$ = new plus_node($1, $3); }
+
+    | exp GREATER mulexp { $$ = new greater_node($1, $3); }
+
+    | exp EQUIVALENT mulexp { $$ = new equivalent_node($1, $3); }
 
     | exp MINUS mulexp { $$ = new minus_node($1, $3); }
 
@@ -151,14 +170,17 @@ bmulexp:
 btermexp:
 	NOT btermexp { $$ = new not_node($2); }
 
-	| bprimitive { $$ = $1; }
+	| bequal { $$ = $1; }
 ;
 
+bequal:
+    bexp EQUALS_EQUALS bexp { $$ = new equals_equals_node($1, $3); }
+
+    | bprimitive { $$ = $1; }
+;
 
 bprimitive:
 	LPAREN bexp RPAREN { $$ = $2; }
-
-	| bexp EQUALS_EQUALS bexp { $$ = new equals_equals_node($1, $3); }
 
 	| ID { $$ = new boolean_id_node($1); }
 
@@ -169,25 +191,23 @@ bprimitive:
 
 
 %%
-int main(int argc, char **argv)
-{ 
-  if (argc>1) yyin=fopen(argv[1],"r");
+int main(int argc, char **argv) {
+    if (argc>1) yyin=fopen(argv[1],"r");
 
-  //  yydebug = 1;
-  yyparse();
+    //  yydebug = 1;
+    yyparse();
 
-  cout << "---------- list of input program------------" << endl << endl;
+    cout << "---------- list of input program------------" << endl << endl;
 
-  root -> print();
+    root -> print();
 
-  cout << "---------- exeuction of input program------------" << endl << endl;
+    cout << "---------- exeuction of input program------------" << endl << endl;
   
 
-  root->evaluate();
+    root->evaluate();
 }
 
-void yyerror(const char * s)
-{
-  fprintf(stderr, "line %d: %s\n", line_num, s);
+void yyerror(const char * s) {
+    fprintf(stderr, "line %d: %s\n", line_num, s);
 }
 
