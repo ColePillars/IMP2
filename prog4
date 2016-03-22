@@ -1,4 +1,7 @@
-while (true) do
+a = 10;
+b = 1;
+
+while (a > b) do
 print b;
 b = b + 1;
 ;

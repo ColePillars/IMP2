@@ -171,13 +171,21 @@ class equals_equals_node : public boolean_operator_node {
 	    bool evaluate();
 };
 
-////Boolean GREATER Constructor
-//class greater_node : public operator_node {
-//    public:
-//	    greater_node(exp_node *L, exp_node *R);
-//	    void print();
-//	    float evaluate();
-//};
+//Boolean GREATER Constructor
+class greater_node : public operator_node {
+    public:
+	    greater_node(exp_node *L, exp_node *R);
+	    void print();
+	    float evaluate();
+};
+
+//Equivalence for expressions (numbers)
+class equivalent_node : public operator_node {
+    public:
+        equivalent_node(exp_node *L, exp_node *R);
+        void print();
+        float evaluate();
+};
 
 // divide_node inherits the characteristics of node and adds its own evaluate function
 class divide_node : public operator_node {
@@ -196,10 +204,10 @@ class statement {
 //If-Else Statement inherits the characteristics of statements, evaluates, and prints. 
 class if_else_stmt : public statement {
     protected:
-	    bexp_node *bexp;
+	    exp_node *exp;
 	    statement *stmtlist1, *stmtlist2;
     public:
-	    if_else_stmt(bexp_node *bexp, statement *stmtlist1, statement *stmtlist2);
+	    if_else_stmt(exp_node *exp, statement *stmtlist1, statement *stmtlist2);
 	    void print();
 	    void evaluate();
 };
@@ -207,10 +215,10 @@ class if_else_stmt : public statement {
 //While statement inherits the characteristics of statements, evaluates, and prints. 
 class while_do_stmt : public statement {
     protected:
-	    bexp_node *bexp;
+	    exp_node *exp;
 	    statement *stmtlist1;
     public:
-	    while_do_stmt(bexp_node *bexp, statement *stmtlist1);
+	    while_do_stmt(exp_node *exp, statement *stmtlist1);
 	    void print();
 	    void evaluate();
 };

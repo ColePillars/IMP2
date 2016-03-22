@@ -70,7 +70,7 @@ void yyerror(const char * s);
 %token <true1> TRUE
 %token <false1> FALSE
 %token SEMICOLON  EQUALS PRINT  PLUS MINUS TIMES DIVIDE  LPAREN RPAREN LBRACE RBRACE B_EQUALS
-%token AND OR NOT EQUALS_EQUALS GREATER IF THEN ELSE WHILE DO
+%token AND OR NOT EQUALS_EQUALS GREATER EQUIVALENT IF THEN ELSE WHILE DO
 %type <exp_node_ptr> exp
 %type <exp_node_ptr> mulexp
 %type <exp_node_ptr> primexp
@@ -110,14 +110,18 @@ stmt:
 
     | LBRACE stmtlist RBRACE { $$=$2; }
 
-    | IF LPAREN bexp RPAREN THEN stmtlist ELSE stmtlist {$$ = new if_else_stmt($3, $6, $8);}
+    | IF LPAREN exp RPAREN THEN stmtlist ELSE stmtlist {$$ = new if_else_stmt($3, $6, $8);}
 
-    | WHILE LPAREN bexp RPAREN DO stmtlist {$$ = new while_do_stmt($3, $6);}
+    | WHILE LPAREN exp RPAREN DO stmtlist {$$ = new while_do_stmt($3, $6);}
 ;
 
 
 exp:
     exp PLUS mulexp { $$ = new plus_node($1, $3); }
+
+    | exp GREATER mulexp { $$ = new greater_node($1, $3); }
+
+    | exp EQUIVALENT mulexp { $$ = new equivalent_node($1, $3); }
 
     | exp MINUS mulexp { $$ = new minus_node($1, $3); }
 
@@ -171,8 +175,6 @@ btermexp:
 
 bequal:
     bexp EQUALS_EQUALS bexp { $$ = new equals_equals_node($1, $3); }
-
-    //| exp GREATER exp { $$ = new greater_node($1, $3); }
 
     | bprimitive { $$ = $1; }
 ;

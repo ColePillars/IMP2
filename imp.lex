@@ -76,6 +76,7 @@ print   { return PRINT; }
 "!"     { return NOT;			    }
 "=="    { return EQUALS_EQUALS;	    }
 ">"     { return GREATER;           }
+"##"    { return EQUIVALENT;	    }
 
 
 . { BEGIN(ERROR); yymore(); }

@@ -277,7 +277,7 @@ bool and_node::evaluate() {
     return left_num && right_num;
 }
 
-//Handles == expressions
+//Handles == expressions (Equivalent boolean expressions)
 equals_equals_node::equals_equals_node(bexp_node *L, bexp_node *R) : boolean_operator_node(L,R) {}
 
 void equals_equals_node:: print() {
@@ -297,30 +297,55 @@ bool equals_equals_node::evaluate() {
     return left_num == right_num;
 }
 
-////Handles > expressions
-//greater_node::greater_node(exp_node *L, exp_node *R) : operator_node(L, R) {}
-//
-//void greater_node::print() {
-//    cout << "( ";
-//  	left->print();
-//  	cout << " > ";
-//  	right->print();
-//  	cout << " )";
-//}
-//
-//float greater_node::evaluate() {
-//    float left_num, right_num;
-//
-//    left_num = left->evaluate();
-//    right_num = right->evaluate();
-//
-//    if (left_num > right_num) {
-//        return 1;
-//    }
-//    else {
-//        return 0;
-//    }
-//}
+//Handles > expressions
+greater_node::greater_node(exp_node *L, exp_node *R) : operator_node(L, R) {}
+
+void greater_node::print() {
+    cout << "( ";
+  	left->print();
+  	cout << " > ";
+  	right->print();
+  	cout << " )";
+}
+
+float greater_node::evaluate() {
+    float left_num, right_num;
+
+    left_num = left->evaluate();
+    right_num = right->evaluate();
+
+    if (left_num > right_num) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
+
+//Handles ## expressions (Equivalent expressions)
+equivalent_node::equivalent_node(exp_node *L, exp_node *R) : operator_node(L, R) {}
+
+void equivalent_node::print() {
+    cout << "( ";
+  	left->print();
+  	cout << " == ";
+  	right->print();
+  	cout << " )";
+}
+
+float equivalent_node::evaluate() {
+    float left_num, right_num;
+
+    left_num = left->evaluate();
+    right_num = right->evaluate();
+
+    if (left_num == right_num) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
 
 //Handles ! expression
 not_node::not_node(bexp_node *myexp) : bexp(myexp)  {}
@@ -367,9 +392,9 @@ void boolean_print_stmt::evaluate() {
 //if_than_stmt inherits the characteristic nodes and evalutates it works with imp.h file
 
 //Constructor for all three conditions for if else statement. 
-if_else_stmt::if_else_stmt(bexp_node *bexp, statement *stmtlist1, statement *stmtlist2)
+if_else_stmt::if_else_stmt(exp_node *exp, statement *stmtlist1, statement *stmtlist2)
 {
-	this->bexp = bexp;
+	this->exp = exp;
 	this->stmtlist1 = stmtlist1;
 	this->stmtlist2 = stmtlist2;
 }
@@ -377,7 +402,7 @@ if_else_stmt::if_else_stmt(bexp_node *bexp, statement *stmtlist1, statement *stm
 void if_else_stmt::print()
 {
 	cout << "if ( ";
-	this->bexp->print();
+	this->exp->print();
 	cout << " )" << endl;
 
 	this->stmtlist1->print();
@@ -390,7 +415,7 @@ void if_else_stmt::print()
 //Evaluates the condition and statements through an if-else statement
 void if_else_stmt::evaluate()
 {
-	if (this->bexp->evaluate())
+	if (this->exp->evaluate())
 	{
 		this->stmtlist1->evaluate();
 	}
@@ -403,16 +428,16 @@ void if_else_stmt::evaluate()
 //-------------While Statement-------------------
 
 //While statement constructor.
-while_do_stmt::while_do_stmt(bexp_node *bexp, statement *stmtlist1)
+while_do_stmt::while_do_stmt(exp_node *exp, statement *stmtlist1)
 {
-	this->bexp = bexp;
+	this->exp = exp;
 	this->stmtlist1 = stmtlist1;
 }
 //Prints of out the while statement.
 void while_do_stmt::print()
 {
 	cout << "while ( ";
-	this->bexp->print();
+	this->exp->print();
 	cout << " )" << endl;
 
 	cout << "do: " << endl;
@@ -422,7 +447,7 @@ void while_do_stmt::print()
 //Evaluate the condition and the do statement in a while loop.
 void while_do_stmt::evaluate()
 {
-	while (this->bexp->evaluate())
+	while (this->exp->evaluate())
 	{
 		this->stmtlist1->evaluate();
 	}
