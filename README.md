@@ -1,4 +1,4 @@
 # IMP2
-Run "make" in directory (must use cygwin if on windows)
+Run "make" in directory
 
 To run program file use "./imp *progfile*"
