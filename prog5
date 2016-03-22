@@ -1,0 +1,17 @@
+a = input;
+b = input;
+c = input;
+
+print a*b/c;
+
+d $= false;
+
+if (d) then
+print a;
+else
+print b;
+;
+
+e $= true;
+
+print !e;

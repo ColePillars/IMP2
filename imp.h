@@ -171,12 +171,12 @@ class equals_equals_node : public boolean_operator_node {
 	    bool evaluate();
 };
 
-////Boolean GREATER OR EQUALS Constructor
-//class greater_or_equals_node : public operator_node {
-//public:
-//	greater_or_equals_node(exp_node *L, exp_node *R);
-//	void print();
-//	float evaluate();
+////Boolean GREATER Constructor
+//class greater_node : public operator_node {
+//    public:
+//	    greater_node(exp_node *L, exp_node *R);
+//	    void print();
+//	    float evaluate();
 //};
 
 // divide_node inherits the characteristics of node and adds its own evaluate function
@@ -226,7 +226,7 @@ class assignment_stmt : public statement {
 };
 
 //Boolean assignment stmt Constructor, duplicated from assignment stmt to prevent ambiguity
-class boolean_assignment_stmt : public statement {
+class boolean_assignment_stmt : public statement{
     protected:
 	    string id;
 	    bexp_node *bexp;

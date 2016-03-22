@@ -75,7 +75,7 @@ print   { return PRINT; }
 "||"    { return OR;				}
 "!"     { return NOT;			    }
 "=="    { return EQUALS_EQUALS;	    }
-">="    { return GREATER_OR_EQUALS; }
+">"     { return GREATER;           }
 
 
 . { BEGIN(ERROR); yymore(); }

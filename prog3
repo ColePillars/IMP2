@@ -1,13 +1,7 @@
 a $= false;
 
 if (a) then
-print a;
+print 100;
 else
 print 10;
-;
-
-b = 0;
-while (true) do
-print b;
-b = b + 1;
 ;

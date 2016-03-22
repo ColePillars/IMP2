@@ -17,7 +17,7 @@
    bexp -> bexp || bmulexp | bmulexp
    bmulexp -> bmulexp && btermexp | btermexp
    btermexp -> !bterm | bprimitive
-   bprimitive -> (bexp) | bexp == bexp | id | true | false
+   bprimitive -> (bexp) | bexp == bexp | exp > exp | id | true | false
 
 
 */
@@ -70,13 +70,14 @@ void yyerror(const char * s);
 %token <true1> TRUE
 %token <false1> FALSE
 %token SEMICOLON  EQUALS PRINT  PLUS MINUS TIMES DIVIDE  LPAREN RPAREN LBRACE RBRACE B_EQUALS
-%token AND OR NOT EQUALS_EQUALS GREATER_OR_EQUALS IF THEN ELSE WHILE DO
+%token AND OR NOT EQUALS_EQUALS GREATER IF THEN ELSE WHILE DO
 %type <exp_node_ptr> exp
 %type <exp_node_ptr> mulexp
 %type <exp_node_ptr> primexp
 %type <bexp_node_ptr> bexp
 %type <bexp_node_ptr> bmulexp
 %type <bexp_node_ptr> btermexp
+%type <bexp_node_ptr> bequal
 %type <bexp_node_ptr> bprimitive
 %type <st> stmtlist
 %type <st> stmt
@@ -165,14 +166,19 @@ bmulexp:
 btermexp:
 	NOT btermexp { $$ = new not_node($2); }
 
-	| bprimitive { $$ = $1; }
+	| bequal { $$ = $1; }
 ;
 
+bequal:
+    bexp EQUALS_EQUALS bexp { $$ = new equals_equals_node($1, $3); }
+
+    //| exp GREATER exp { $$ = new greater_node($1, $3); }
+
+    | bprimitive { $$ = $1; }
+;
 
 bprimitive:
 	LPAREN bexp RPAREN { $$ = $2; }
-
-	| bexp EQUALS_EQUALS bexp { $$ = new equals_equals_node($1, $3); }
 
 	| ID { $$ = new boolean_id_node($1); }
 
@@ -183,25 +189,23 @@ bprimitive:
 
 
 %%
-int main(int argc, char **argv)
-{ 
-  if (argc>1) yyin=fopen(argv[1],"r");
+int main(int argc, char **argv) {
+    if (argc>1) yyin=fopen(argv[1],"r");
 
-  //  yydebug = 1;
-  yyparse();
+    //  yydebug = 1;
+    yyparse();
 
-  cout << "---------- list of input program------------" << endl << endl;
+    cout << "---------- list of input program------------" << endl << endl;
 
-  root -> print();
+    root -> print();
 
-  cout << "---------- exeuction of input program------------" << endl << endl;
+    cout << "---------- exeuction of input program------------" << endl << endl;
   
 
-  root->evaluate();
+    root->evaluate();
 }
 
-void yyerror(const char * s)
-{
-  fprintf(stderr, "line %d: %s\n", line_num, s);
+void yyerror(const char * s) {
+    fprintf(stderr, "line %d: %s\n", line_num, s);
 }
 

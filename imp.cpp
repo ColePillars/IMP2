@@ -297,24 +297,30 @@ bool equals_equals_node::evaluate() {
     return left_num == right_num;
 }
 
-//  greater_or_equals_node::greater_or_equals_node(exp_node *L, exp_node *R) : operator_node(L,R) {}
+////Handles > expressions
+//greater_node::greater_node(exp_node *L, exp_node *R) : operator_node(L, R) {}
 //
-//  void greater_or_equals_node:: print() {
-//  	cout << "(";
+//void greater_node::print() {
+//    cout << "( ";
 //  	left->print();
-//  	cout << " >= ";
+//  	cout << " > ";
 //  	right->print();
-//  	cout << ")";
-//  }
+//  	cout << " )";
+//}
 //
-//  float greater_or_equals_node::evaluate() {
-//       float left_num, right_num;
+//float greater_node::evaluate() {
+//    float left_num, right_num;
 //
-//      left_num = left->evaluate();
-//      right_num = right->evaluate();
+//    left_num = left->evaluate();
+//    right_num = right->evaluate();
 //
-//      return left_num >= right_num;
-//  }
+//    if (left_num > right_num) {
+//        return 1;
+//    }
+//    else {
+//        return 0;
+//    }
+//}
 
 //Handles ! expression
 not_node::not_node(bexp_node *myexp) : bexp(myexp)  {}
