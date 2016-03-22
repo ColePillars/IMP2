@@ -6,7 +6,8 @@
 
    pgm -> stmtlist
    stmtlist -> stmt | stmtlist ; stmt
-   stmt -> id = exp |  print id
+   stmt -> id = exp 
+        |  print id
    exp -> exp + mulexp | exp - mulexp 
    mulexp -> mulexp * primexp | mulexp / primexp
    primexp ->  ( exp ) | ( exp ) | - primexp | id | number 
@@ -63,59 +64,65 @@ void yyerror(const char * s);
 
 %%
 
-program :
-    stmtlist { root = $$; }
+program : stmtlist { root = $$; }
 ;
 
-stmtlist :
-    stmtlist SEMICOLON stmt { $$ = new sequence_stmt($1,$3); }
-    |
-    stmtlist SEMICOLON error { $$ = $1; yyclearin; }
-    |
-    stmt { $$ = $1; }
+stmtlist : stmtlist SEMICOLON stmt
+            { // copy up the list and add the stmt to it
+              $$ = new sequence_stmt($1,$3);
+            }
+         | stmtlist SEMICOLON error
+	   { // just copy up the stmtlist when an error occurs
+             $$ = $1;
+             yyclearin; } 
+         |  stmt 
+	 { $$ = $1;   }
 ;
 
-stmt:
-    ID EQUALS exp { $$ = new assignment_stmt($1, $3); }
-    |
-    PRINT exp { $$ = new print_stmt($2); }
-    |
-    { $$ = new skip_stmt(); }
-    |
-    LBRACE stmtlist RBRACE { $$=$2; }
+stmt: ID EQUALS exp { 
+  $$ = new assignment_stmt($1, $3);
+	   }
+       
+| PRINT exp {
+  $$ = new print_stmt($2);
+ }
+
+|
+{ $$ = new skip_stmt();
+}
+| LBRACE stmtlist RBRACE { $$=$2; } 
  ;
 
 
-exp:
-    exp PLUS mulexp { $$ = new plus_node($1, $3); }
-    |
-    exp MINUS mulexp { $$ = new minus_node($1, $3); }
-    |
-    mulexp {  $$ = $1; }
+exp:	exp PLUS mulexp { $$ = new plus_node($1, $3); }
+
+      |	exp MINUS mulexp { $$ = new minus_node($1, $3); }
+
+      |	mulexp {  $$ = $1; }
 ;
 
 
 
-mulexp:
-    mulexp TIMES primexp { $$ = new times_node($1, $3); }
-    |
-    mulexp DIVIDE primexp { $$ = new divide_node($1, $3); }
-    |
-    primexp { $$=$1;  }
+mulexp:	mulexp TIMES primexp {
+	  $$ = new times_node($1, $3); }
+
+      | mulexp DIVIDE primexp {
+	  $$ = new divide_node($1, $3); }
+
+      | primexp { $$=$1;  }
 ;
 
 
 
-primexp:
-    MINUS primexp %prec UMINUS { $$ = new unary_minus_node($2); }
-    |
-    LPAREN exp RPAREN  {  $$ = $2; }
-    |
-    NUMBER { $$ = new number_node($1); }
-    |
-    ID { $$ = new id_node($1); }
-    |
-    INPUT { $$ = new input_node($1); }
+primexp:	MINUS primexp %prec UMINUS { $$ = new unary_minus_node($2); }
+
+      |	LPAREN exp RPAREN  {  $$ = $2; }
+
+      |	NUMBER { $$ = new number_node($1); }
+
+      | ID { $$ = new id_node($1); }
+
+      | INPUT { $$ = new input_node($1); }
 ;
  
 %%
