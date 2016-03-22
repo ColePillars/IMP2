@@ -1,0 +1,9 @@
+a = 10;
+b = 1;
+
+c = a ## b;
+
+while (c##0) do
+b = b+1;
+print b;
+c = a ## b;

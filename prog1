@@ -1,5 +1,24 @@
-x=input;
-y=13;
-z=input;
-print -x*y;
-print x/z;
+a $= true;
+b $= false;
+c $= b;
+
+d $= (a || b);
+e $= (a && b);
+
+f $= (a == b);
+g $= (a == true);
+
+h $= !true;
+i $= !a;
+j $= !i;
+
+print a;
+print b;
+print c;
+print d;
+print e;
+print f;
+print g;
+print h;
+print i;
+print j;

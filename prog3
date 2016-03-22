@@ -1,0 +1,7 @@
+a $= false;
+
+if (a) then
+print 100;
+else
+print 10;
+;
