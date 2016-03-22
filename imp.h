@@ -223,6 +223,30 @@ class while_do_stmt : public statement {
 	    void evaluate();
 };
 
+//If-Else Statement inherits the characteristics of statements, evaluates, and prints. 
+class if_else_stmt : public statement
+{
+protected:
+	bexp_node *bexp;
+	statement *stmtlist1, *stmtlist2;
+public:
+	if_else_stmt(bexp_node *bexp, statement *stmtlist1, statement *stmtlist2);
+	void print();
+	void evaluate();
+};
+
+//While statement inherits the characteristics of statements, evaluates, and prints. 
+class while_do_stmt : public statement
+{
+protected:
+	bexp_node *bexp;
+	statement *stmtlist1;
+public:
+	while_do_stmt(bexp_node *bexp, statement *stmtlist1);
+	void print();
+	void evaluate();
+};
+
 class assignment_stmt : public statement {
     protected:
         string id;
